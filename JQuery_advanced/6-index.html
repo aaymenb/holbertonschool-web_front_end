@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8" />
+		<title>Task 6</title>
+		<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+	</head>
+	<body>
+		<script type="application/javascript">
+			function createFamilyTree() {
+				const table = $('<table>');
+				const thead = $('<thead>').append(
+					$('<tr>')
+					.append($('<th>').text('Firstname'))
+					.append($('<th>').text('Lastname'))
+				);
+				const tbody = $('<tbody>');
+				table.append(thead, tbody);
+				$('body').append(table);
+			}
+
+			function addNewMember(firstName, lastName, position) {
+				const row = $('<tr>')
+					.append($('<td>').text(firstName))
+					.append($('<td>').text(lastName))
+					.append(
+						$('<td>')
+						.text('(x)')
+						.css('background-color', 'orange')
+						.click(function() {
+							$(this).parent().remove();
+						})
+					);
+
+				if (position === 'before') {
+					$('tbody').prepend(row);
+				} else {
+					$('tbody').append(row);
+				}
+			}
+
+			function createForm() {
+				const form = $('<form>').submit(function(e) {
+					e.preventDefault();
+					const firstName = $('#firstName').val();
+					const lastName = $('#lastName').val();
+					const position = $('#position').val();
+					addNewMember(firstName, lastName, position);
+				});
+
+				form.append(
+					$('<input>').attr({
+						type: 'text',
+						id: 'firstName',
+						placeholder: 'First Name'
+					}),
+					$('<input>').attr({
+						type: 'text',
+						id: 'lastName',
+						placeholder: 'Last Name'
+					}),
+					$('<select>').attr('id', 'position')
+					.append(
+						$('<option>').val('before').text('Before'),
+						$('<option>').val('after').text('After')
+					),
+					$('<input>').attr('type', 'submit')
+				);
+
+				$('table').before(form);
+			}
+
+			$(document).ready(function() {
+				createFamilyTree();
+				createForm();
+			});
+		</script>
+	</body>
+</html>

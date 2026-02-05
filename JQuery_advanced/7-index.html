@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8" />
+		<title>Task 8</title>
+		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+		<style>
+.pagination-item {
+	cursor: pointer;
+	margin-left: 10px;
+	display: inline-block;
+}
+	    .active {
+		    font-weight: bold;
+	    }
+		</style>
+	</head>
+	<body>
+		<script type="application/javascript">
+			function createSearchForm() {
+				const form = $('<form>').submit(function(e) {
+					e.preventDefault();
+					const searchValue = $('input[type="text"]').val();
+					queryWikipedia(searchValue);
+				});
+
+				form.append(
+					$('<input>').attr('type', 'text'),
+					$('<input>').attr('type', 'submit')
+				);
+
+				$('body').append(
+					form,
+					$('<ul>'),
+					$('<ul>').attr('id', 'pagination')
+				);
+			}
+
+			function buildPagination(numberOfItems, itemsPerPage, currentOffset) {
+				const $pagination = $('#pagination').empty();
+				const numberOfPages = Math.ceil(numberOfItems / itemsPerPage);
+
+				for (let i = 0; i < numberOfPages; i++) {
+					const offset = i * itemsPerPage;
+					const $item = $('<li>')
+						.addClass('pagination-item')
+						.text(i + 1)
+						.click(() => queryWikipedia($('input[type="text"]').val(), offset));
+
+					if (offset === currentOffset) {
+						$item.addClass('active');
+					}
+
+					$pagination.append($item);
+				}
+			}
+
+			function queryWikipedia(search, offset = 0) {
+				$.ajax({
+					url: 'https://en.wikipedia.org/w/api.php',
+					data: {
+						action: 'query',
+						list: 'search',
+						srsearch: search,
+						format: 'json',
+						origin: '*',
+						sroffset: offset,
+						srlimit: 10
+					},
+					success: function(response) {
+						$('ul:not(#pagination)').empty();
+						response.query.search.forEach(result => {
+							addNewArticle(
+								result.pageid,
+								result.title,
+								result.snippet
+							);
+						});
+						buildPagination(response.query.searchinfo.totalhits, 10, offset);
+					}
+				});
+			}
+
+			function addNewArticle(id, title, snippet) {
+				const li = $('<li>').append(
+					$('<p>').append(
+						$('<span>').text(id + ' - '),
+						$('<b>').text(title)
+					),
+					$('<p>').html(snippet)
+				);
+
+				$('ul').append(li);
+			}
+
+			$(document).ready(createSearchForm);
+		</script>
+	</body>
+</html>

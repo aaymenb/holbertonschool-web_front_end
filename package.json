@@ -1,0 +1,17 @@
+{
+  "name": "cookies-local-storage",
+  "version": "1.0.0",
+  "description": "Cookies and Local Storage project",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "webpack-dev-server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}

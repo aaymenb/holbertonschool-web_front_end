@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8" />
+		<title>Task 11</title>
+		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	</head>
+	<body>
+		<script type="application/javascript">
+			function buildForm() {
+				const form = $('<form>').append(
+					$('<div>').append(
+						$('<label>').text('Author').attr('for', 'author'),
+						$('<input>').attr({type: 'text', id: 'author'})
+					),
+					$('<div>').append(
+						$('<label>').text('Title').attr('for', 'title'),
+						$('<textarea>').attr('id', 'title')
+					),
+					$('<input>').attr('type', 'submit')
+				);
+
+				form.on('submit', function(e) {
+					e.preventDefault();
+					sendForm();
+				});
+
+				$('body').append(form);
+			}
+
+			function sendForm() {
+				const data = {
+					title: $('#title').val(),
+					author: $('#author').val()
+				};
+
+				$('form').after('About to send the query to the API...');
+
+				$.post('http://localhost:3000/posts', data)
+					.done(function(response) {
+						addPostRow(response);
+					})
+					.fail(function() {
+						alert('Error sending the POST query');
+					});
+			}
+
+			$(document).ready(function() {
+				listPosts();
+				buildForm();
+			});
+		</script>
+	</body>
+</html>

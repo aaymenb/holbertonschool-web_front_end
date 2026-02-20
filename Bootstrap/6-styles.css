@@ -1,0 +1,54 @@
+/* Bouton primary */
+.btn-primary {
+    background-color: #E0003C;
+    border-color: #E0003C;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: #BC1340;
+    border-color: #BC1340;
+}
+
+/* Bouton outline primary */
+.btn-outline-primary {
+    color: #E0003C;
+    border-color: #E0003C;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
+    background-color: #E0003C;
+}
+
+/* Liens */
+a,
+a:hover,
+a:focus {
+    color: #E0003C;
+}
+
+/* Cards */
+.card {
+    border-radius: 1rem;
+    border-color: #E0003C;
+}
+
+.card-header {
+    border-radius: calc(1rem - 1px) calc(1rem - 1px) 0 0 !important;
+    border-color: #E0003C;
+}
+
+.card-footer {
+    border-radius: 0 0 calc(1rem - 1px) calc(1rem - 1px);
+    border-color: #E0003C;
+}
+
+/* Texte muté */
+.text-muted {
+    color: #8C8C8C !important;
+}
+
+

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8" />
+		<title>Task 9</title>
+		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+		<style>
+.loading {
+	opacity: 0.2;
+}
+		</style>
+	</head>
+	<body>
+		<script type="application/javascript">
+			function displayLoading(loading) {
+				if (loading) {
+					$('ul').first().wrap('<div class="loading"></div>');
+				} else {
+					$('ul').first().unwrap();
+				}
+			}
+
+			function queryWikipedia(search, offset = 0) {
+				displayLoading(true);
+				$.ajax({
+					url: 'https://en.wikipedia.org/w/api.php',
+					data: {
+						action: 'query',
+						list: 'search',
+						srsearch: search,
+						format: 'json',
+						origin: '*',
+						sroffset: offset,
+						srlimit: 10
+					},
+					success: function(response) {
+						$('ul:not(#pagination)').empty();
+						response.query.search.forEach(result => {
+							addNewArticle(
+								result.pageid,
+								result.title,
+								result.snippet
+							);
+						});
+						buildPagination(response.query.searchinfo.totalhits, 10, offset);
+						displayLoading(false);
+					}
+				});
+			}
+
+			// Les autres fonctions restent les mêmes que dans l'exercice précédent
+
+			$(document).ready(createSearchForm);
+		</script>
+	</body>
+</html>

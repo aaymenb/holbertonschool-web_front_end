@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Cookies - Task 4</title>
+		<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+		<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+	body {
+		font-family: Arial, sans-serif;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 100vh;
+		background-color: #f5f5f5;
+	}
+
+	.container {
+		background-color: white;
+		padding: 40px;
+		border-radius: 8px;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		width: 100%;
+		max-width: 400px;
+	}
+
+	h1 {
+		text-align: center;
+		color: #333;
+	}
+
+	h2 {
+		text-align: center;
+		margin-bottom: 30px;
+		color: #333;
+	}
+
+	.form-group {
+		margin-bottom: 20px;
+	}
+
+	label {
+		display: block;
+		margin-bottom: 8px;
+		color: #555;
+		font-weight: 500;
+	}
+
+	input[type="text"],
+	input[type="email"] {
+		width: 100%;
+		padding: 10px;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		font-size: 14px;
+	}
+
+	input[type="text"]:focus,
+	input[type="email"]:focus {
+		outline: none;
+		border-color: #4CAF50;
+	}
+
+	button {
+		width: 100%;
+		padding: 12px;
+		border: none;
+		border-radius: 4px;
+		font-size: 14px;
+		cursor: pointer;
+		transition: background-color 0.3s;
+		margin-top: 10px;
+	}
+
+	button:hover {
+		opacity: 0.9;
+	}
+
+	#loginBtn {
+		background-color: #4CAF50;
+		color: white;
+	}
+
+	#loginForm {
+		display: none;
+	}
+
+	#loginForm.show {
+		display: block;
+	}
+
+	.welcome-message {
+		text-align: center;
+	}
+
+	.welcome-message h1 {
+		display: inline;
+	}
+
+	.logout-link {
+		font-weight: normal;
+		font-style: italic;
+		margin-left: 10px;
+		color: #2196F3;
+		text-decoration: none;
+	}
+
+	.logout-link:hover {
+		text-decoration: underline;
+	}
+		</style>
+		<script>
+			function setCookiesAndShowWelcomeMessage() {
+				const firstname = document.getElementById('firstname').value;
+				const email = document.getElementById('email').value;
+
+				// Set cookies with expiration date (10 days from now) using js-cookie
+				Cookies.set('firstname', firstname, { expires: 10 });
+				Cookies.set('email', email, { expires: 10 });
+
+				// Show welcome message after setting cookies
+				showWelcomeMessageOrForm();
+			}
+
+			function showForm() {
+				// Replace body content with the form
+				document.body.innerHTML = `
+		<div id="loginForm" class="container show">
+		    <h2>Login</h2>
+		    <div class="form-group">
+			<label for="firstname">First name:</label>
+			<input type="text" id="firstname" placeholder="Enter your first name">
+		    </div>
+		    <div class="form-group">
+			<label for="email">Email:</label>
+			<input type="email" id="email" placeholder="Enter your email">
+		    </div>
+		    <button id="loginBtn" onclick="setCookiesAndShowWelcomeMessage()">Log me in</button>
+		</div>
+	    `;
+			}
+
+			function hideForm() {
+				const loginForm = document.getElementById('loginForm');
+				loginForm.classList.remove('show');
+			}
+
+			function deleteCookiesAndShowForm() {
+				// Remove the two cookies using js-cookie
+				Cookies.remove('firstname');
+				Cookies.remove('email');
+
+				// Show form
+				showForm();
+			}
+
+			function showWelcomeMessageOrForm() {
+				// Use js-cookie get function instead of custom getCookie
+				const firstname = Cookies.get('firstname');
+				const email = Cookies.get('email');
+
+				if (!firstname || !email) {
+					// User is not logged in, show the form
+					showForm();
+				} else {
+					// User is logged in, replace body with welcome message
+					// Clear body content
+					document.body.innerHTML = '';
+
+					// Create welcome message container
+					const welcomeContainer = document.createElement('div');
+					welcomeContainer.className = 'welcome-message';
+
+					// Create h1 element
+					const h1 = document.createElement('h1');
+
+					// Create text node for "Welcome FIRSTNAME "
+					const welcomeText = document.createTextNode(`Welcome ${firstname} `);
+
+					// Create logout link
+					const logoutLink = document.createElement('a');
+					logoutLink.href = '#';
+					logoutLink.className = 'logout-link';
+					logoutLink.textContent = '(logout)';
+					logoutLink.onclick = function(e) {
+						e.preventDefault();
+						deleteCookiesAndShowForm();
+					};
+
+					// Append text and link to h1
+					h1.appendChild(welcomeText);
+					h1.appendChild(logoutLink);
+
+					// Append h1 to container
+					welcomeContainer.appendChild(h1);
+
+					// Append container to body
+					document.body.appendChild(welcomeContainer);
+				}
+			}
+
+			// Check on page load when DOM is ready
+			if (document.readyState === 'loading') {
+				document.addEventListener('DOMContentLoaded', showWelcomeMessageOrForm);
+			} else {
+				showWelcomeMessageOrForm();
+			}
+		</script>
+	</head>
+	<body>
+		<div id="loginForm" class="container">
+			<h2>Login</h2>
+			<div class="form-group">
+				<label for="firstname">First name:</label>
+				<input type="text" id="firstname" placeholder="Enter your first name">
+			</div>
+			<div class="form-group">
+				<label for="email">Email:</label>
+				<input type="email" id="email" placeholder="Enter your email">
+			</div>
+			<button id="loginBtn" onclick="setCookiesAndShowWelcomeMessage()">Log me in</button>
+		</div>
+	</body>
+</html>
+

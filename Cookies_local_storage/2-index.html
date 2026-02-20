@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Cookies - Task 2</title>
+		<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+	body {
+		font-family: Arial, sans-serif;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 100vh;
+		background-color: #f5f5f5;
+	}
+
+	.container {
+		background-color: white;
+		padding: 40px;
+		border-radius: 8px;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		width: 100%;
+		max-width: 400px;
+	}
+
+	h1 {
+		text-align: center;
+		margin-bottom: 30px;
+		color: #333;
+	}
+
+	.form-group {
+		margin-bottom: 20px;
+	}
+
+	label {
+		display: block;
+		margin-bottom: 8px;
+		color: #555;
+		font-weight: 500;
+	}
+
+	input[type="text"],
+	input[type="email"] {
+		width: 100%;
+		padding: 10px;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		font-size: 14px;
+	}
+
+	input[type="text"]:focus,
+	input[type="email"]:focus {
+		outline: none;
+		border-color: #4CAF50;
+	}
+
+	.button-group {
+		display: flex;
+		gap: 10px;
+		margin-top: 30px;
+	}
+
+	button {
+		flex: 1;
+		padding: 12px;
+		border: none;
+		border-radius: 4px;
+		font-size: 14px;
+		cursor: pointer;
+		transition: background-color 0.3s;
+	}
+
+	button:hover {
+		opacity: 0.9;
+	}
+
+	#loginBtn {
+		background-color: #4CAF50;
+		color: white;
+	}
+
+	#showBtn {
+		background-color: #2196F3;
+		color: white;
+	}
+
+	#cookiesDisplay {
+		margin-top: 30px;
+		padding: 15px;
+		background-color: #f9f9f9;
+		border-radius: 4px;
+		border-left: 4px solid #4CAF50;
+	}
+
+	#cookiesDisplay p {
+		color: #333;
+		font-size: 14px;
+		line-height: 1.6;
+	}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Login</h1>
+			<div class="form-group">
+				<label for="firstname">First name:</label>
+				<input type="text" id="firstname" placeholder="Enter your first name">
+			</div>
+			<div class="form-group">
+				<label for="email">Email:</label>
+				<input type="email" id="email" placeholder="Enter your email">
+			</div>
+			<div class="button-group">
+				<button id="loginBtn" onclick="setCookies()">Log me in</button>
+				<button id="showBtn" onclick="showCookies()">Show the cookies</button>
+			</div>
+			<div id="cookiesDisplay"></div>
+		</div>
+
+		<script>
+			function getCookie(name) {
+				const cookies = document.cookie.split(';');
+				for (let i = 0; i < cookies.length; i++) {
+					const cookie = cookies[i].trim();
+					if (cookie.startsWith(name + '=')) {
+						return cookie.substring(name.length + 1);
+					}
+				}
+				return '';
+			}
+
+			function setCookies() {
+				const firstname = document.getElementById('firstname').value;
+				const email = document.getElementById('email').value;
+
+				// Set cookies with expiration date (10 days from now)
+				const expirationDate = new Date();
+				expirationDate.setTime(expirationDate.getTime() + (10 * 24 * 60 * 60 * 1000));
+				const expires = "expires=" + expirationDate.toUTCString();
+
+				document.cookie = `firstname=${firstname}; ${expires}; path=/`;
+				document.cookie = `email=${email}; ${expires}; path=/`;
+			}
+
+			function showCookies() {
+				const cookiesDisplay = document.getElementById('cookiesDisplay');
+
+				// Get cookie values using getCookie function
+				const email = getCookie('email');
+				const firstname = getCookie('firstname');
+
+				// Create paragraph element
+				const paragraph = document.createElement('p');
+				paragraph.innerHTML = `Email: ${email} - Firstname: ${firstname}`;
+
+				// Clear previous content and append new paragraph
+				cookiesDisplay.innerHTML = '';
+				cookiesDisplay.appendChild(paragraph);
+			}
+		</script>
+	</body>
+</html>
+
